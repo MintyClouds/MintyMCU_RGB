@@ -5,7 +5,7 @@ Click==7.0
 colorama==0.4.3
 colorlog==4.0.2
 ecdsa==0.15
-esphome==1.14.3
+esphome==2021.9.2
 esptool==2.7
 idna==2.8
 ifaddr==0.1.6
