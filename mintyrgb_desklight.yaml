@@ -1,5 +1,5 @@
 esphome:
-  name: mintymcu_rgb
+  name: mintymcu_rgb_master
   platform: ESP8266
   board: nodemcuv2
 
@@ -26,10 +26,10 @@ ota:
 
 sensor:
   - platform: wifi_signal
-    name: "MintyMCU_RGB WiFi Signal Sensor"
+    name: "MintyMCU_RGB MasterLight WiFi Signal Sensor"
     update_interval: 60s
   - platform: uptime
-    name: "MintyMCU_RGB Uptime Sensor"
+    name: "MintyMCU_RGB MasterLight Sensor"
     update_interval: 60s
     filters:
       - lambda: return x / (24 * 3600);
@@ -37,12 +37,12 @@ sensor:
 
 switch:
   - platform: restart
-    name: "MintyMCU_RGB Restart"
+    name: "MintyMCU_RGB MasterLight Restart"
   - platform: template
-    name: "MintyMCU_RGB DeskLight Default Color"
+    name: "MintyMCU_RGB MasterLight Default Color"
     turn_on_action:
         - light.turn_on:
-            id: mintyrgb_desklight
+            id: mintyrgb_masterlight
             brightness: 98%
             red: 4%
             green: 100%
@@ -50,27 +50,27 @@ switch:
 
 binary_sensor:
     - platform: status
-      name: "MintyMCU_RGB Status"
+      name: "MintyMCU_RGB MasterLight Status"
 
 text_sensor:
   - platform: wifi_info
     ip_address:
-      name: "MintyMCU_RGB IP Address"
+      name: "MintyMCU_RGB MasterLight IP Address"
     ssid:
-      name: "MintyMCU_RGB Connected SSID"
+      name: "MintyMCU_RGB MasterLight Connected SSID"
     bssid:
-      name: "MintyMCU_RGB Connected BSSID"
+      name: "MintyMCU_RGB MasterLight Connected BSSID"
   - platform: version
-    name: "MintyMCU_RGB ESPHome Version"
+    name: "MintyMCU_RGB MasterLight ESPHome Version"
 
 light:
   - platform: neopixelbus
     type: GRB
     pin: GPIO3
     num_leds: 144
-    name: "MintyRGB DeskLight"
-    id: mintyrgb_desklight
-    color_correct: [50%, 50%, 50%]
+    name: "MintyRGB MasterLight"
+    id: mintyrgb_masterlight
+    # color_correct: [50%, 50%, 50%]
     effects:
       - flicker:
           name: Flicker Effect (80%, 4%)
