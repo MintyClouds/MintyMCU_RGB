@@ -100,7 +100,7 @@ light:
           name: Minty Color Effect
           sequence:
             - light.addressable_set:
-                id: mintyrgb_desklight
+                id: mintyrgb_masterlight
                 red: 4%
                 green: 100%
                 blue: 57%
