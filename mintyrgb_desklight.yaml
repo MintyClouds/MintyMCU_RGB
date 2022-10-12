@@ -67,6 +67,7 @@ light:
   - platform: neopixelbus
     type: GRB
     pin: GPIO3
+    variant: WS2812
     num_leds: 144
     name: "MintyRGB MasterLight"
     id: mintyrgb_masterlight
