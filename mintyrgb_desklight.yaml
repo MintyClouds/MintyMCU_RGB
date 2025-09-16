@@ -1,7 +1,13 @@
 esphome:
-  name: mintymcu_rgb
-  platform: ESP8266
-  board: nodemcuv2
+  name: ts27meter
+  platformio_options:
+    board_build.flash_mode: dio
+
+esp32:
+  board: esp32-c3-devkitm-1
+  framework:
+    type: arduino
+
 
 wifi:
   ssid: !secret wifi_ssid
@@ -26,10 +32,10 @@ ota:
 
 sensor:
   - platform: wifi_signal
-    name: "MintyMCU_RGB WiFi Signal Sensor"
+    name: "MintyMCU_DeskStranding WiFi Signal Sensor"
     update_interval: 60s
   - platform: uptime
-    name: "MintyMCU_RGB Uptime Sensor"
+    name: "MintyMCU_DeskStranding Uptime Sensor"
     update_interval: 60s
     filters:
       - lambda: return x / (24 * 3600);
@@ -37,9 +43,9 @@ sensor:
 
 switch:
   - platform: restart
-    name: "MintyMCU_RGB Restart"
+    name: "MintyMCU_DeskStranding Restart"
   - platform: template
-    name: "MintyMCU_RGB DeskLight Default Color"
+    name: "MintyMCU_DeskStranding Default Color"
     turn_on_action:
         - light.turn_on:
             id: mintyrgb_desklight
@@ -50,69 +56,89 @@ switch:
 
 binary_sensor:
     - platform: status
-      name: "MintyMCU_RGB Status"
+      name: "MintyMCU_DeskStranding Status"
 
 text_sensor:
   - platform: wifi_info
     ip_address:
-      name: "MintyMCU_RGB IP Address"
+      name: "MintyMCU_DeskStranding IP Address"
     ssid:
-      name: "MintyMCU_RGB Connected SSID"
+      name: "MintyMCU_DeskStranding Connected SSID"
     bssid:
-      name: "MintyMCU_RGB Connected BSSID"
+      name: "MintyMCU_DeskStranding Connected BSSID"
   - platform: version
-    name: "MintyMCU_RGB ESPHome Version"
+    name: "MintyMCU_DeskStranding ESPHome Version"
+
+output:
+  - platform: ledc
+    id: lights_out_r
+    pin: GPIO4        # R
+    frequency: 4000Hz # 1–5 кГц — оптимально
+    # inverted: true  # включай, если яркость «перевёрнута»
+
+  - platform: ledc
+    id: lights_out_g
+    pin: GPIO5        # G
+    frequency: 4000Hz
+
+  - platform: ledc
+    id: lights_out_b
+    pin: GPIO6        # B
+    frequency: 4000Hz
 
 light:
-  - platform: neopixelbus
-    type: GRB
-    pin: GPIO3
-    num_leds: 144
-    name: "MintyRGB DeskLight"
-    id: mintyrgb_desklight
-    color_correct: [50%, 50%, 50%]
-    effects:
-      - flicker:
-          name: Flicker Effect (80%, 4%)
-          alpha: 80%
-          intensity: 4%
-      - addressable_rainbow:
-      - addressable_scan:
-          name: Scan Effect (200ms, 35 leds)
-          move_interval: 50ms
-          scan_width: 35
-      - addressable_flicker:
-          name: Addressable Flicker Effect (150ms, 50%)
-          update_interval: 150ms
-          intensity: 50%
-      - addressable_twinkle:
-          name: Twinkle Effect (4ms, 15%)
-          progress_interval: 4ms
-          twinkle_probability: 15%
-      - addressable_fireworks:
-          name: Fireworks Effect (50ms, 10%, 30)
-          update_interval: 50ms
-          spark_probability: 10%
-          use_random_color: false
-          fade_out_rate: 30
-      - automation:
-          name: Minty Color Effect
-          sequence:
-            - light.addressable_set:
-                id: mintyrgb_desklight
-                red: 4%
-                green: 100%
-                blue: 57%
-      - addressable_color_wipe:
-          name: Minty-Purple Color Wipe
-          colors:
-            - red: 4%
-              green: 100%
-              blue: 57%
-              num_leds: 30
-            - red: 100%
-              green: 0%
-              blue: 50%
-              num_leds: 10
-          add_led_interval: 50ms
+  - platform: rgb
+    red: lights_out_r
+    green: lights_out_g
+    blue: lights_out_b
+    name: "MintyRGB DeskStranding"
+    id: mintyrgb_deskstranding
+    gamma_correct: 2.4
+    default_transition_lenght: 300ms
+    # color_correct: [50%, 50%, 50%]
+
+    # effects:
+    #   - flicker:
+    #       name: Flicker Effect (80%, 4%)
+    #       alpha: 80%
+    #       intensity: 4%
+    #   - addressable_rainbow:
+    #   - addressable_scan:
+    #       name: Scan Effect (200ms, 35 leds)
+    #       move_interval: 50ms
+    #       scan_width: 35
+    #   - addressable_flicker:
+    #       name: Addressable Flicker Effect (150ms, 50%)
+    #       update_interval: 150ms
+    #       intensity: 50%
+    #   - addressable_twinkle:
+    #       name: Twinkle Effect (4ms, 15%)
+    #       progress_interval: 4ms
+    #       twinkle_probability: 15%
+    #   - addressable_fireworks:
+    #       name: Fireworks Effect (50ms, 10%, 30)
+    #       update_interval: 50ms
+    #       spark_probability: 10%
+    #       use_random_color: false
+    #       fade_out_rate: 30
+    #   - automation:
+    #       name: Minty Color Effect
+    #       sequence:
+    #         - light.addressable_set:
+    #             id: mintyrgb_desklight
+    #             red: 4%
+    #             green: 100%
+    #             blue: 57%
+    #   - addressable_color_wipe:
+    #       name: Minty-Purple Color Wipe
+    #       colors:
+    #         - red: 4%
+    #           green: 100%
+    #           blue: 57%
+    #           num_leds: 30
+    #         - red: 100%
+    #           green: 0%
+    #           blue: 50%
+    #           num_leds: 10
+    #       add_led_interval: 50ms
 
