@@ -69,21 +69,27 @@ text_sensor:
   - platform: version
     name: "MintyMCU_DeskStranding ESPHome Version"
 
+power_supply:
+  - id: strip_master
+    pin: GPIO4        # любой свободный GPIO
+    enable_time: 20ms # задержка после включения перед подачей PWM
+    keep_on_time: 500ms
+
 output:
   - platform: ledc
     id: lights_out_r
-    pin: GPIO4        # R
+    pin: GPIO5        # R
     frequency: 4000Hz # 1–5 кГц — оптимально
     # inverted: true  # включай, если яркость «перевёрнута»
 
   - platform: ledc
     id: lights_out_g
-    pin: GPIO5        # G
+    pin: GPIO6        # G
     frequency: 4000Hz
 
   - platform: ledc
     id: lights_out_b
-    pin: GPIO6        # B
+    pin: GPIO7        # B
     frequency: 4000Hz
 
 light:
